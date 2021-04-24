@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+<!--    <script src="static/scripts/request_page_scripts.js"></script>-->
+    <script src="templates/scripts/request_page_scripts.js"></script>
+    <link rel="stylesheet" href="templates/static/styles/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FaceSearcherV2.0</title>
+</head>
+<body>
+<section class="section hero is-fullheight first-section">
+    <div class="columns is-centered hero-body">
+        <div class="column is-two-thirds-tablet is-half-desktop is-one-third-widescreen">
+            <div class="box">
+<!--                <figure class="image is-128x128 container">-->
+<!--                    <img src="static/images/logo.png" id="logo">-->
+<!--                </figure>-->
+                <div class="field">
+                <div class="control">
+                    <label class="label" for="album_link">Ссылка на альбом</label>
+                    <input type="url" class="input is-primary is-large" id="album_link"
+                           name="album_link" placeholder="https://">
+                </div>
+                </div>
+
+                <div class="field">
+                <label class="label" for="face_file" id="user_helper_text">Загрузите фотографии</label>
+                    <div class="block has-text-right" id="uploading_files_list">
+                    </div>
+                    <div class="block">
+                        <div id="dragndrop_upload" class="disabled">
+                                <p class="dragndrop_text">Перенесите файлы сюда</p>
+                        </div>
+                    </div>
+                <div class="control">
+                    <input class="file-input" type="file" id="face_file" name="face_file">
+                    <button onclick="document.getElementById('face_file').click()" class="button"
+                    id="add_file_button" disabled>Добавить фото</button>
+                </div>
+
+                <div class="field is-grouped is-grouped-right">
+                    <button class="button is-right is-large" id="send_button">Поиск</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="hero-foot has-text-centered">
+        <p class="title is-5">
+          &#169;Radmirkus
+        </p>
+    </div>
+</section>
+
+<!--<section class="is-large">-->
+<!--    <div class="columns">-->
+<!--        <div class="column content is-two-thirds container has-text-centered">-->
+<!--            <p>-->
+<!--                Немного о проекте-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--<footer class="footer">-->
+<!--&lt;!&ndash;  <div class="content has-text-centered">&ndash;&gt;-->
+<!--    <p>-->
+<!--      &#169;Bananasocks-->
+<!--    </p>-->
+<!--  </div>-->
+<!--</footer>-->
+
+</body>
+</html>
