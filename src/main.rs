@@ -11,7 +11,6 @@ use std::io::{BufReader, Read};
 use rocket::response::content::Html;
 use std::{env, fs};
 
-
 mod api_data_types;
 mod api_wrappers;
 
@@ -29,10 +28,10 @@ fn index() -> content::Html<String> {
     //     println!("{:?}", d)
     // }
     // let context = context();
-    let mut html_content = String::new();
-    let request_page_file = File::open("templates/request_page.html").unwrap();
-    let mut buf_reader = BufReader::new(request_page_file);
-    buf_reader.read_to_string(&mut html_content);
+    let html_content = fs::read_to_string("templates/request_page.html").expect("Unable to open file");
+    // let request_page_file = File::open("").unwrap();
+    // let mut buf_reader = BufReader::new(request_page_file);
+    // buf_reader.read_to_string(&mut html_content);
     content::Html(html_content)
 }
 
@@ -60,11 +59,22 @@ fn download_result(request_id: u32) -> Option<NamedFile> {
     NamedFile::open(Path::new(&format!("static/{}", request_id.to_string()))).ok()
 }
 
+// mod statics {
+//     use rocket::response::NamedFile;
+//     use std::path::{PathBuf, Path};
+//
+//     #[get("/templates/<resource..>")]
+//     fn templates(resource: PathBuf) -> Option<NamedFile> {
+//         NamedFile::open(Path::new("templates").join(resource)).ok()
+// }
+// }
+
 
 fn main() {
     rocket::ignite()
         .mount("/", routes![index, templates])
         // .mount("/", routes![index])
+        // .mount("/templates", StaticFiles::from("/templates"))
         .attach(Template::fairing())
         .launch();
 
