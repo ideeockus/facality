@@ -13,6 +13,7 @@ use std::{env, fs};
 
 mod api_data_types;
 mod api_wrappers;
+mod utils;
 
 // #[get("/")]
 // fn index() -> Template {
