@@ -6,11 +6,11 @@ pub trait APIWrapper {
     fn get_photo_list(album_url: &str) -> Option<Vec<String>>;
 }
 
-enum ResourceType {
-    VK, TG, FB, IG,
+pub enum ResourceType {
+    VK, TG, FB, IG
 }
 
-fn get_api_wrapper(resource_type: ResourceType) -> impl APIWrapper {
+pub fn get_api_wrapper(resource_type: ResourceType) -> impl APIWrapper {
     match resource_type {
         ResourceType::VK => VkAPIWrapper,
         _ => panic!()  // no wrapper for album resource type
