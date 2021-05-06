@@ -10,8 +10,9 @@ use std::panic;
 pub struct VkAPIWrapper; //unit-like struct
 
 impl APIWrapper for VkAPIWrapper {  //implementation APIWrapper
-    fn get_photo_list(album_url: &str) -> Option<Vec<String>> {
+    fn get_photo_list(&self, album_url: &str) -> Option<Vec<String>> {
         let result = panic::catch_unwind( || {
+            println!("{:?}", album_url);
             let album_data: Vec<&str> = album_url.split("album").collect::<Vec<&str>>()[1].split("_").collect();
             // println!("{:?}", album_data);
             let owner_id: String = album_data[0].to_string();
@@ -25,7 +26,7 @@ impl APIWrapper for VkAPIWrapper {  //implementation APIWrapper
             let photos_count = VkAPIWrapper::vk_api_req(
                 "photos.get",
                 &args,
-            ).get("response").unwrap()
+            ).get("response").expect("Error in VK response")
                 .get("count").unwrap().as_u64().unwrap();
 
             let mut photos_link_list: Vec<String> = Vec::new(); //список ссылок на фото
@@ -56,7 +57,7 @@ impl APIWrapper for VkAPIWrapper {  //implementation APIWrapper
         match result {
             Ok(res)=> Some(res),
             Err(error) => {
-                println!("{:?}", error);
+                println!("error 123123 in vk get_photos_list{:?}", error);
                 None
             },
         }
@@ -64,6 +65,9 @@ impl APIWrapper for VkAPIWrapper {  //implementation APIWrapper
 }
 
 impl VkAPIWrapper {
+    fn new() -> VkAPIWrapper {
+        VkAPIWrapper
+    }
     fn vk_api_req(method: &str, kwargs: &HashMap<&str, String>) -> Value{
         let vk_api_token = env::var("VK_API_TOKEN").expect("NO VK API TOKEN");
         let client = reqwest::blocking::Client::new();
@@ -73,7 +77,7 @@ impl VkAPIWrapper {
         for (k, v) in kwargs.iter() {
             params += &format!("{}={}&", k, v);
         }
-        println!("params is '{}'", params);
+        // println!("params is '{}'", params);
 
         let req_url = format!(
             "https://api.vk.com/method/{method}?{params}v={version}&access_token={token}",
@@ -82,7 +86,7 @@ impl VkAPIWrapper {
 
         // let req_url = format!("https://api.vk.com/method/{method}", method=method);
 
-        println!("generated url: {}", req_url);
+        // println!("generated url: {}", req_url);
 
         // let req_task = client.post(req_url).send();
         // req_task
@@ -90,7 +94,7 @@ impl VkAPIWrapper {
         //     .json(&kwargs).send();
         let resp = client.get(req_url).send();
         // let hm = HashMap::new();
-        println!("{:?}", resp);
+        // println!("{:?}", resp);
         let t = resp.unwrap().text().unwrap_or(String::from("{'error': '123'}"));
         // let t = r#"{\'response\':[{\'first_name\':\'Artem\',\'id\':17348156,\'last_name\':\'Blinov\',\'can_access_closed\':true,\'is_closed\':false}]}"#;
         // println!("{:?}", t.replace("\\", ""));
@@ -113,16 +117,16 @@ mod vk_api_wrapper_tests {
         let mut req_args = HashMap::new();
         req_args.insert("user_ids", "17348156".to_string());
         let resp = super::VkAPIWrapper::vk_api_req("users.get", &req_args);
-        println!("{:?}", resp);
+        // println!("{:?}", resp);
     }
 
     #[test]
     fn test_get_photo_list() {
         let test_album_link = "https://vk.com/decidetodevelop?z=album-192278639_279195741";
-        let photo_links = super::VkAPIWrapper::get_photo_list(test_album_link);
-        println!("{:?}", photo_links);
+        let photo_links = super::VkAPIWrapper::new().get_photo_list(test_album_link);
+        // println!("{:?}", photo_links);
 
-        println!("{:?}", super::VkAPIWrapper::get_photo_list("not a link"));
+        // println!("{:?}", super::VkAPIWrapper::new().get_photo_list("not a link"));
 
     }
 }

@@ -3,7 +3,7 @@ use crate::api_wrappers::vk_api_wrapper::VkAPIWrapper;
 mod vk_api_wrapper;
 
 pub trait APIWrapper {
-    fn get_photo_list(album_url: &str) -> Option<Vec<String>>;
+    fn get_photo_list(&self, album_url: &str) -> Option<Vec<String>>;
 }
 
 pub enum ResourceType {
